@@ -22,6 +22,12 @@ const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer);
 
 
+wsServer.on("connection", (socket) => {
+    // enter_room => 이름을 지정할 수 있는 이유?? 이거 뭐야 
+    socket.on("enter_room", (msg, done) => {
+        console.log(msg);
+    });
+});
 
 
 
