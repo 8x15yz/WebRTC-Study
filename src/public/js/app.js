@@ -7,9 +7,28 @@ const socket = io();
 
 const welcome = document.getElementById("welcome")
 const form = welcome.querySelector("form");
+const room = document.getElementById("room");
 
-function backendDone() {
-    console.log("backend done")
+room.hidden = true;
+
+let roomName;
+
+function addMessage(message){
+    const ul = room.querySelector("ul")
+    const li = document.createElement("li")
+    li.innerText = message
+    ul.appendChild(li);
+}
+
+function showRoom() {
+    welcome.hidden = true;
+    room.hidden = false;
+    const h3 = room.querySelector("h3");
+    h3.innerText = `Room: ${roomName}`
+}
+
+function backendDone(msg) {
+    console.log(`The backend Says:`, msg)
 }
 
 function handleRoomSubmit(event) {
@@ -17,9 +36,10 @@ function handleRoomSubmit(event) {
     const input = form.querySelector("input");
     // socket.emit이라는게 api를 만드는거인듯 ?? 의미를 좀 더 찾아보자 : 근데 기능이 짱 좋다
     // 1. enter_room 이라는 커스텀 이벤트도 socket.io에서는 이용할 수 있다...
-    socket.emit("enter_room", { payload: input.value }, backendDone);
+    socket.emit("enter_room", { payload: input.value }, showRoom);
     // 2. 파싱도 저절로 됨 => front-end에서 object를 바로 전송할 수 있다는 점 ..
     // 3. callback도 됨 => 서버로부터 실행되는 function
+    roomName = input.value;
     input.value = "";
 
 };
@@ -36,4 +56,8 @@ form.addEventListener("submit", handleRoomSubmit);
 //  => 끝날때 실행되는 function을 넣고 싶으면 마지막에 넣는건데
 // 이거는 백엔드에서 프론트엔드 코드를 실행시킨거임
 
+
+socket.on("welcome", () => {
+    addMessage("Someone joined!")
+})
 

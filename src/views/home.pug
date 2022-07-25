@@ -1,6 +1,7 @@
 doctype html
 html(lang="en")
     head
+        //- Websocket은 컴퓨터 바탕 api라서 가벼운 편이고 socket.io는 프레임워크라 무겁다
         meta(charset="UTF-8")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
@@ -14,6 +15,11 @@ html(lang="en")
                 form 
                     input(placeholder="room name", required, type="text")
                     button Enter Room
-        //- Websocket은 컴퓨터 바탕 api라서 가벼운 편이고 socket.io는 프레임워크라 무겁다
+            div#room
+                h3
+                ul 
+                form
+                    input(placeholder="message", required, type="text")
+                    button Send
         script(src="/socket.io/socket.io.js")
         script(src="/public/js/app.js")

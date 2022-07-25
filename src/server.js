@@ -23,12 +23,22 @@ const wsServer = SocketIO(httpServer);
 
 
 wsServer.on("connection", (socket) => {
+
+    socket.onAny((event) => {  // socket.onAny : on에서 받은 이벤트명
+        console.log(`Socket Event: ${event}`);
+    });
     // enter_room => 이름을 지정할 수 있는 이유?? 이거 뭐야 
-    socket.on("enter_room", (msg, done) => {
-        console.log(msg);
+    socket.on("enter_room", (roomName, done) => {
+        socket.join(roomName);
+        done();
+        socket.to(roomName).emit("welcome");
     });
 });
 
+// 방에 들어가기 위해 socket.join 을 사용
+// 어떤 방에 들어갔는지를 알기 위해 socket.rooms 를 사용함
+// 또한 socket에는 id가 있으므로 socket.id로 구별이 가능하다 ~
+// 여러 방에 동시에 참가할 수도 있음 => 이거는 참가자들 채팅방 여러개 접속해있을 수 있는 부분에 적용하면 되겠다
 
 
 /* Websocket 사용한 Web RTC 로직
